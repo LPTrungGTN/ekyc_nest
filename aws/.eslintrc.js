@@ -15,7 +15,19 @@ module.exports = {
     node: true,
     jest: true,
   },
-  ignorePatterns: ['.eslintrc.js'],
+  settings: {
+    'import/parsers': { '@typescript-eslint/parser': ['.ts'] },
+    'import/resolver': {
+      typescript: { alwaysTryTypes: true, directory: './tsconfig.json' },
+    },
+  },
+  ignorePatterns: [
+    'dist/*',
+    '.next/*',
+    'node_modules/*',
+    '.eslintrc.js',
+    '*.json',
+  ],
   rules: {
     '@typescript-eslint/interface-name-prefix': 'off',
     '@typescript-eslint/explicit-function-return-type': 'off',
