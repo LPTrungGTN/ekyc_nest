@@ -1,0 +1,15 @@
+version: '3.8'
+
+services:
+  backend:
+    container_name: aws
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - .:/improve
+    ports:
+      - '3001:3001'
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+      - WATCHPACK_POLLING=true
