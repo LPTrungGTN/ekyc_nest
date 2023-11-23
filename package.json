@@ -1,0 +1,11 @@
+{
+  "name": "ekyc_nest",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/LPTrungGTN/ekyc_nest.git",
+  "author": "LPTrungGTN <135190672+LPTrungGTN@users.noreply.github.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "husky": "^8.0.3"
+  }
+}
