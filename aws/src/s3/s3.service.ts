@@ -4,7 +4,14 @@ import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class S3Service {
-  constructor(private configService: ConfigService) {}
+  private s3: S3;
+
+  constructor(private configService: ConfigService) {
+    this.s3 = new S3({
+      accessKeyId: this.configService.get<string>('AWS_ACCESS_KEY_ID'),
+      secretAccessKey: this.configService.get<string>('AWS_SECRET_ACCESS_KEY'),
+    });
+  }
 
   public async upload(file: {
     buffer: Buffer;
@@ -18,27 +25,19 @@ export class S3Service {
     file: Buffer,
     name: string,
   ): Promise<S3.ManagedUpload.SendData> {
-    const s3 = this.getS3();
     const params: S3.PutObjectRequest = {
       Bucket: this.configService.get<string>('S3_BUCKET_NAME'),
       Key: name,
       Body: file,
     };
     return new Promise((resolve, reject) => {
-      s3.upload(params, (err, data) => {
+      this.s3.upload(params, (err, data) => {
         if (err) {
           Logger.error(err);
           reject(err.message);
         }
         resolve(data);
       });
-    });
-  }
-
-  private getS3(): S3 {
-    return new S3({
-      accessKeyId: this.configService.get<string>('AWS_ACCESS_KEY_ID'),
-      secretAccessKey: this.configService.get<string>('AWS_SECRET_ACCESS_KEY'),
     });
   }
 }
