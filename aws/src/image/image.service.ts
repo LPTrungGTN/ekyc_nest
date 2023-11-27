@@ -26,7 +26,7 @@ export class ImageService {
     );
     try {
       await writeFile(imagePath, file.buffer);
-      return imagePath;
+      //   return imagePath;
     } catch (error) {
       console.log('🚀 ~ file: image.service.ts ~ ImageService ~ error:', error);
       throw new BadRequestException('Error saving image');
