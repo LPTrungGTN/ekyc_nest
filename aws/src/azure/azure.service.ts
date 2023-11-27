@@ -38,9 +38,16 @@ export class AzureService {
       //     this.classifyDocumentService.classifyDocument(imageName),
       //     this.analyzeDocumentService.analyzeDocument(imageName),
       //   ]);
-      const analyzeResult =
-        await this.AnalyzePassportService.analyzePassport(imageName);
-      return [[analyzeResult]];
+
+      //   const analyzeResult =
+      //     await this.AnalyzePassportService.analyzePassport(imageName);
+      //   return [[analyzeResult]];
+
+      if (type === DocumentType.PASSPORT) {
+        const analyzeResult =
+          await this.AnalyzePassportService.analyzePassport(imageName);
+        return analyzeResult;
+      }
     } catch (error) {
       console.error('Error:', error);
     }
