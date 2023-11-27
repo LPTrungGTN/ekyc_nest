@@ -23,7 +23,6 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: root_password1
       MYSQL_DATABASE: ekyc
-      MYSQL_USER: root
     volumes:
       - ./mysql/data:/var/lib/mysql
     ports:
