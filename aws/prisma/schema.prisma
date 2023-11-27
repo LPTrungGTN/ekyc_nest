@@ -9,3 +9,12 @@ datasource db {
   provider = "mysql"
   url      = env("DATABASE_URL")
 }
+
+model Card {
+	id Int @id @default(autoincrement())
+	cardType String
+	straightFace String
+	tiltedFace String
+	createdAt DateTime @default(now())
+	updatedAt DateTime @updatedAt
+}
