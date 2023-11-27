@@ -13,3 +13,32 @@ services:
     environment:
       - CHOKIDAR_USEPOLLING=true
       - WATCHPACK_POLLING=true
+      - NODE_ENV=development
+    depends_on:
+      - mysql
+
+  mysql:
+    image: mysql:8.0
+    container_name: ekyc_db
+    environment:
+      MYSQL_ROOT_PASSWORD: root_password1
+      MYSQL_DATABASE: ekyc
+      MYSQL_USER: root
+    volumes:
+      - ./mysql/data:/var/lib/mysql
+    ports:
+      - '3307:3306'
+    command: --default-authentication-plugin=mysql_native_password
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: phpmyadmin
+    environment:
+      PMA_HOSTS: ekyc_db
+      PMA_USER: root
+      PMA_PASSWORD: root_password1
+      PMA_ARBITRARY: 1
+    ports:
+      - '3400:80'
+    depends_on:
+      - mysql
