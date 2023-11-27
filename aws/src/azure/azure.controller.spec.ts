@@ -1,8 +1,8 @@
-import { Test, TestingModule } from '@nestjs/testing';
-import { AzureController } from './azure.controller';
+// import { Test, TestingModule } from '@nestjs/testing';
+// import { AzureController } from './azure.controller';
 
 describe('AzureController', () => {
-  let controller: AzureController;
+  //   let controller: AzureController;
 
   //   beforeEach(async () => {
   //     const module: TestingModule = await Test.createTestingModule({
