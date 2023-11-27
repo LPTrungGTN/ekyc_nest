@@ -5,7 +5,10 @@ import { join } from 'path';
 
 @Injectable()
 export class ImageService {
-  public async validateImage(file: Buffer): Promise<void> {
+  public async validateImage(file: {
+    buffer: Buffer;
+    originalname: string;
+  }): Promise<void> {
     try {
       await sharp(file.buffer).metadata();
     } catch (error) {

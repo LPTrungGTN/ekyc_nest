@@ -17,10 +17,11 @@ export class UploadController {
 
   @Post()
   @UseInterceptors(FileInterceptor('file'))
-  async upload(@UploadedFile() file) {
+  async upload(
+    @UploadedFile() file: { buffer: Buffer; originalname: string },
+  ): Promise<string> {
     await this.imageService.validateImage(file);
 
     return this.imageService.saveImage(file);
-    // return await this.s3Service.upload(file);
   }
 }
