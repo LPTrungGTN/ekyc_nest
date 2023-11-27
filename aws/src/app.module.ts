@@ -18,6 +18,14 @@ import { AnalyzePassportService } from './azure/analyze-passport/analyze-passpor
     }),
   ],
   controllers: [AppController, UploadController, AzureController],
-  providers: [AppService, S3Service, ImageService, AzureService, ClassifyDocumentService, AnalyzeDocumentService, AnalyzePassportService],
+  providers: [
+    AppService,
+    S3Service,
+    ImageService,
+    AzureService,
+    ClassifyDocumentService,
+    AnalyzeDocumentService,
+    AnalyzePassportService,
+  ],
 })
 export class AppModule {}

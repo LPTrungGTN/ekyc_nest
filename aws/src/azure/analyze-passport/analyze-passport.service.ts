@@ -5,23 +5,22 @@ import {
 } from '@azure/ai-form-recognizer';
 import * as fs from 'fs';
 import * as path from 'path';
-import { machine } from 'os';
 
 @Injectable()
 export class AnalyzePassportService {
   private readonly client: DocumentAnalysisClient;
 
   constructor() {
-    const endpoint = process.env.FORM_RECOGNIZER_ENDPOINT;
+    const endpoint = 'process.env.FORM_RECOGNIZER_ENDPOINT';
     const credential = new AzureKeyCredential(
-      process.env.FORM_RECOGNIZER_API_KEY,
+      ' process.env.FORM_RECOGNIZER_API_KEY',
     );
     this.client = new DocumentAnalysisClient(endpoint, credential);
   }
 
   async analyzePassport(
     imageName: string,
-  ): Promise<string | { error: string }> {
+  ): Promise<{ [key: string]: string } | { error: string }> {
     const readStream = fs.createReadStream(
       path.join('src/public/image/', imageName),
     );
@@ -42,14 +41,12 @@ export class AnalyzePassportService {
       const machineReadableTexts =
         document.fields['MachineReadableZone']['properties'];
 
-      const result = [];
+      const documentResult: { [key: string]: string } = {};
 
       for (const key in machineReadableTexts) {
-        let value = machineReadableTexts[key].value;
-
-        result.push(key + ':' + machineReadableTexts[key].value);
+        documentResult[key] = machineReadableTexts[key].value;
       }
-      console.log(result);
+      return documentResult;
     } else {
       console.log('cannot extract data');
       return { error: 'cannot extract data' };

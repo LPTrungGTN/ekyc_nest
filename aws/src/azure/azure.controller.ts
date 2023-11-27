@@ -17,7 +17,7 @@ export class AzureController {
   async processImage(
     @Body('type') type: number,
     @Body('imageName') imageName: string,
-    @Res() res: Response, 
+    @Res() res: Response,
   ): Promise<void> {
     if (!imageName || type === undefined) {
       throw new BadRequestException(
@@ -34,5 +34,4 @@ export class AzureController {
 }
 
 // src / public / image / image.jpg;
-    // const imagePath = 'src/public/image/image.jpg';
-
+// const imagePath = 'src/public/image/image.jpg';
