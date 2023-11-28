@@ -11,9 +11,9 @@ export class AnalyzePassportService {
   private readonly client: DocumentAnalysisClient;
 
   constructor() {
-    const endpoint = 'process.env.FORM_RECOGNIZER_ENDPOINT';
+    const endpoint = process.env.FORM_RECOGNIZER_ENDPOINT;
     const credential = new AzureKeyCredential(
-      ' process.env.FORM_RECOGNIZER_API_KEY',
+      process.env.FORM_RECOGNIZER_API_KEY,
     );
     this.client = new DocumentAnalysisClient(endpoint, credential);
   }

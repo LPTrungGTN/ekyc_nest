@@ -13,7 +13,7 @@ export class AnalyzeDocumentService {
   constructor() {
     const endpoint = process.env.FORM_RECOGNIZER_ENDPOINT;
     const credential = new AzureKeyCredential(
-      'process.env.FORM_RECOGNIZER_API_KEY',
+      process.env.FORM_RECOGNIZER_API_KEY,
     );
     this.client = new DocumentAnalysisClient(endpoint, credential);
   }
@@ -22,7 +22,7 @@ export class AnalyzeDocumentService {
     const readStream = fs.createReadStream(
       path.join('src/public/image/', imageName),
     );
-    const modelId = 'process.env.CUSTOM_MODEL_ID';
+    const modelId = process.env.CUSTOM_MODEL_ID;
 
     console.log(`Analyzing document using model ID ${modelId}...`);
 

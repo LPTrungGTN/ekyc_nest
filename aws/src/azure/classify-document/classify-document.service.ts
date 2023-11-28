@@ -9,9 +9,9 @@ import * as path from 'path';
 
 @Injectable()
 export class ClassifyDocumentService {
-  private readonly endpoint = 'process.env.FORM_RECOGNIZER_ENDPOINT';
+  private readonly endpoint = process.env.FORM_RECOGNIZER_ENDPOINT;
   private readonly credential = new AzureKeyCredential(
-    'process.env.FORM_RECOGNIZER_API_KEY',
+    process.env.FORM_RECOGNIZER_API_KEY,
   );
   private readonly client = new DocumentAnalysisClient(
     this.endpoint,
@@ -23,7 +23,7 @@ export class ClassifyDocumentService {
       path.join('src/public/image/', imageName),
     );
 
-    const classifierId = 'process.env.CUSTOM_CLASSIFIER_ID';
+    const classifierId = process.env.CUSTOM_CLASSIFIER_ID;
 
     console.log(`Classifying document using classifier ID ${classifierId}...`);
 
