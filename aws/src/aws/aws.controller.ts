@@ -5,11 +5,11 @@ import {
   UploadedFile,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { S3Service } from '@/s3/s3.service';
+import { S3Service } from '@/aws/s3/s3.service';
 import { ImageService } from '@/image/image.service';
 
-@Controller('upload')
-export class UploadController {
+@Controller('aws')
+export class AwsController {
   constructor(
     private readonly s3Service: S3Service,
     private readonly imageService: ImageService,
