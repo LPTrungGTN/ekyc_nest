@@ -13,7 +13,8 @@
     "paths": {
       "@/*": ["src/*"],
       "@config/*": ["src/config/*"],
-      "@aws/*": ["src/aws/*"]
+      "@aws/*": ["src/aws/*"],
+      "@filters/*": ["src/common/filters/*"]
     },
     "incremental": true,
     "skipLibCheck": true,

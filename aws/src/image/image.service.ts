@@ -2,15 +2,16 @@ import { Injectable, BadRequestException } from '@nestjs/common';
 import * as sharp from 'sharp';
 import { writeFile } from 'fs/promises';
 import { join } from 'path';
+import { Metadata } from 'sharp';
 
 @Injectable()
 export class ImageService {
   public async validateImage(file: {
     buffer: Buffer;
     originalname: string;
-  }): Promise<void> {
+  }): Promise<Metadata> {
     try {
-      await sharp(file.buffer).metadata();
+      return await sharp(file.buffer).metadata();
     } catch (error) {
       throw new BadRequestException('You need send image');
     }

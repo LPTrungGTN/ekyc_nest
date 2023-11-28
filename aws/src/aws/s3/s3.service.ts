@@ -1,5 +1,5 @@
 import { S3, Rekognition } from 'aws-sdk';
-import { Logger, Injectable } from '@nestjs/common';
+import { Logger, Injectable, BadRequestException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { CardService } from '@/card/card.service';
 import { Card } from '@prisma/client';
@@ -29,14 +29,32 @@ export class S3Service {
     try {
       const { originalname } = file;
       await this.uploadS3(file.buffer, originalname);
-      this.detectFaces(originalname);
+      const response = await this.detectFaces(originalname);
+      console.log(
+        '🚀 ~ file: s3.service.ts:33 ~ S3Service ~ response:',
+        response.FaceDetails.length === 0,
+      );
+      if (response.FaceDetails.length === 0) {
+        throw new BadRequestException('Cannot detect face');
+      }
+      const face = response.FaceDetails[0];
+      const { Roll, Yaw, Pitch } = face.Pose;
+      const threshold = 10;
+      if (
+        Math.abs(Roll) >= threshold ||
+        Math.abs(Yaw) >= threshold ||
+        Math.abs(Pitch) >= threshold
+      ) {
+        throw new BadRequestException('Not straight face');
+      }
+
       const cardData = {
         cardType: 'passport',
         straightFace: originalname,
       };
       return this.cardService.create(cardData);
     } catch (error) {
-      return error;
+      throw error;
     }
   }
 
