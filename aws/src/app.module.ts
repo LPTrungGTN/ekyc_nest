@@ -9,19 +9,18 @@ import { ClassifyDocumentService } from './azure/classify-document/classify-docu
 import { AnalyzeDocumentService } from './azure/analyze-document/analyze-document.service';
 import { AnalyzePassportService } from './azure/analyze-passport/analyze-passport.service';
 import { PrismaService } from '@prisma/prisma.service';
-import { AwsController } from '@aws/aws.controller';
-import { S3Service } from '@aws/s3/s3.service';
+import { AwsModule } from '@aws/aws.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
     }),
+    AwsModule,
   ],
-  controllers: [AppController, AzureController, AwsController],
+  controllers: [AppController, AzureController],
   providers: [
     AppService,
-    S3Service,
     ImageService,
     AzureService,
     ClassifyDocumentService,
