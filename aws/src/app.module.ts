@@ -7,7 +7,7 @@ import { ImageService } from './image/image.service';
 import { AzureModule } from '@/azure/azure.module';
 import { AwsModule } from '@aws/aws.module';
 import { CardModule } from '@/card/card.module';
-import { PrismaService } from '@prisma/prisma.service';
+import { PrismaService } from '@/prisma/prisma.service';
 
 @Module({
   imports: [
