@@ -1,28 +1,43 @@
 import { S3, Rekognition } from 'aws-sdk';
 import { Logger, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import { CardService } from '@/card/card.service';
+import { Card } from '@prisma/client';
 
 @Injectable()
 export class S3Service {
   private s3: S3;
   private rekognition: Rekognition;
 
-  constructor(private configService: ConfigService) {
+  public constructor(
+    private configService: ConfigService,
+    private cardService: CardService,
+  ) {
     this.s3 = new S3({
       region: this.configService.get<string>('AWS_REGION'),
       accessKeyId: this.configService.get<string>('AWS_ACCESS_KEY_ID'),
       secretAccessKey: this.configService.get<string>('AWS_SECRET_ACCESS_KEY'),
     });
     this.rekognition = new Rekognition();
+    this.cardService = cardService;
   }
 
   public async upload(file: {
     buffer: Buffer;
     originalname: string;
-  }): Promise<Rekognition.DetectFacesResponse> {
-    const { originalname } = file;
-    await this.uploadS3(file.buffer, originalname);
-    return this.detectFaces(originalname);
+  }): Promise<Card> {
+    try {
+      const { originalname } = file;
+      await this.uploadS3(file.buffer, originalname);
+      this.detectFaces(originalname);
+      const cardData = {
+        cardType: 'passport',
+        straightFace: originalname,
+      };
+      return this.cardService.create(cardData);
+    } catch (error) {
+      return error;
+    }
   }
 
   private async uploadS3(
