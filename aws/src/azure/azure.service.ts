@@ -6,7 +6,6 @@ import { ClassifyDocumentService } from './classify-document/classify-document.s
 import { AnalyzeDocumentService } from './analyze-document/analyze-document.service';
 import { AnalyzePassportService } from './analyze-passport/analyze-passport.service';
 import { DatabaseService } from './import-cardinfo/import-cardinfo.service';
-import { PrismaService } from '@/prisma/prisma.service';
 
 import DocumentType from './document-type.enum';
 import DocumentModelid from './document-modelid.enums';
@@ -24,7 +23,6 @@ export class AzureService {
     this.analyzeDocumentService = new AnalyzeDocumentService();
     this.AnalyzePassportService = new AnalyzePassportService();
     this.databaseService = new DatabaseService();
-    
   }
 
   async processImage(
@@ -41,7 +39,7 @@ export class AzureService {
       if (type === DocumentType.passport) {
         const analyzeResult =
           await this.AnalyzePassportService.analyzePassport(imageName);
-        return analyzeResult; 
+        return analyzeResult;
       } else {
         const [classifyResult, analyzeResult] = await Promise.all([
           this.classifyDocumentService.classifyDocument(imageName),
@@ -61,12 +59,9 @@ export class AzureService {
         switch (type) {
           case DocumentType.residence_card:
             if (classifyResult === 'residence_card') {
+              this.databaseService.saveDataToDatabase(analyzeResult);
 
-
-              this.databaseService.saveDataToDatabase(analyzeResult)
-
-
-              return analyzeResult; 
+              return analyzeResult;
             } else {
               return {
                 // Trả về thông báo lỗi nếu phân loại sai
@@ -75,7 +70,7 @@ export class AzureService {
             }
           case DocumentType.lisense:
             if (classifyResult === 'lisense') {
-              return analyzeResult; 
+              return analyzeResult;
             } else {
               return {
                 // Trả về thông báo lỗi nếu phân loại sai
@@ -84,7 +79,7 @@ export class AzureService {
             }
           case DocumentType.my_number:
             if (classifyResult === 'my_number') {
-              return analyzeResult; 
+              return analyzeResult;
             } else {
               return {
                 // Trả về thông báo lỗi nếu phân loại sai
@@ -93,7 +88,7 @@ export class AzureService {
             }
           case DocumentType.Vietnamese_idcard:
             if (classifyResult === 'Vietnamese_idcard') {
-              return analyzeResult; 
+              return analyzeResult;
             } else {
               return {
                 // Trả về thông báo lỗi nếu phân loại sai

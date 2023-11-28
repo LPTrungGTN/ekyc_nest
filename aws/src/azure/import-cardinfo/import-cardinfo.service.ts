@@ -3,12 +3,12 @@ import { PrismaService } from '@/prisma/prisma.service';
 
 @Injectable()
 export class DatabaseService {
-    private readonly prisma: PrismaService;
+  private readonly prisma: PrismaService;
   constructor() {
-    this.prisma =new  PrismaService();
+    this.prisma = new PrismaService();
   }
 
-  async saveDataToDatabase(dataToSave: Object): Promise<Object> {
+  async saveDataToDatabase(dataToSave: object): Promise<object> {
     try {
       const result = await this.prisma.card_informations.create({
         data: {

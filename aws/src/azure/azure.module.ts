@@ -13,7 +13,7 @@ import { PrismaService } from '@/prisma/prisma.service';
     ClassifyDocumentService,
     AnalyzeDocumentService,
     AnalyzePassportService,
-    PrismaService
+    PrismaService,
   ],
 })
 export class AzureModule {}
