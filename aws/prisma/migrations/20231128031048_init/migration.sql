@@ -2,8 +2,8 @@
 CREATE TABLE `Card` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `cardType` VARCHAR(191) NOT NULL,
-    `straightFace` VARCHAR(191) NOT NULL,
-    `tiltedFace` VARCHAR(191) NOT NULL,
+    `straightFace` VARCHAR(191) NULL,
+    `tiltedFace` VARCHAR(191) NULL,
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updatedAt` DATETIME(3) NOT NULL,
 
