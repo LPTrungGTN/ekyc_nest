@@ -18,15 +18,16 @@ export class AnalyzeDocumentService {
     this.client = new DocumentAnalysisClient(endpoint, credential);
   }
 
-  async analyzeDocument(imageName: string): Promise<{ [key: string]: string }> {
+  async analyzeDocument(
+    imageName: string,
+    model: string,
+  ): Promise<{ [key: string]: string }> {
     const readStream = fs.createReadStream(
       path.join('src/public/image/', imageName),
     );
-    const modelId = process.env.CUSTOM_MODEL_ID;
+    console.log(`Analyzing document using model ID ${model}...`);
 
-    console.log(`Analyzing document using model ID ${modelId}...`);
-
-    const poller = await this.client.beginAnalyzeDocument(modelId, readStream);
+    const poller = await this.client.beginAnalyzeDocument(model, readStream);
     const result = await poller.pollUntilDone();
 
     if (!result.documents || result.documents.length === 0) {

@@ -7,6 +7,7 @@ import { AnalyzeDocumentService } from './analyze-document/analyze-document.serv
 import { AnalyzePassportService } from './analyze-passport/analyze-passport.service';
 
 import DocumentType from './document-type.enum';
+import DocumentModelid from './document-modelid.enums';
 
 @Injectable()
 export class AzureService {
@@ -39,11 +40,17 @@ export class AzureService {
       } else {
         const [classifyResult, analyzeResult] = await Promise.all([
           this.classifyDocumentService.classifyDocument(imageName),
-          this.analyzeDocumentService.analyzeDocument(imageName),
+          this.analyzeDocumentService.analyzeDocument(
+            imageName,
+            DocumentModelid[type],
+          ),
         ]);
 
         const endTime = performance.now();
         const elapsedTime = (endTime - startTime) / 1000;
+
+        // loop
+        // console.log("document type ls",DocumentType[1]);
 
         console.log(`Time : ${elapsedTime} s`);
         switch (type) {

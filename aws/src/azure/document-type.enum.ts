@@ -1,6 +1,6 @@
 // document-type.enum.ts
 
-enum DocumentType {
+enum DocumentModelid {
   passport = 1,
   residence_card = 2,
   lisense = 3,
@@ -8,4 +8,4 @@ enum DocumentType {
   Vietnamese_idcard = 5,
 }
 
-export default DocumentType;
+export default DocumentModelid;
