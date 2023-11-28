@@ -16,10 +16,6 @@ import { AzureModule } from './azure/azure.module';
     AzureModule
   ],
   controllers: [AppController],
-  providers: [
-    AppService,
-    ImageService,
-    PrismaService,
-  ],
+  providers: [AppService, ImageService, PrismaService],
 })
 export class AppModule {}
