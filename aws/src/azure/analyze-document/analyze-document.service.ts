@@ -11,7 +11,7 @@ export class AnalyzeDocumentService {
   private readonly client: DocumentAnalysisClient;
 
   constructor() {
-    const endpoint = 'process.env.FORM_RECOGNIZER_ENDPOINT';
+    const endpoint = process.env.FORM_RECOGNIZER_ENDPOINT;
     const credential = new AzureKeyCredential(
       'process.env.FORM_RECOGNIZER_API_KEY',
     );
