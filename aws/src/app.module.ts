@@ -13,7 +13,7 @@ import { AzureModule } from './azure/azure.module';
       isGlobal: true,
     }),
     AwsModule,
-    AzureModule
+    AzureModule,
   ],
   controllers: [AppController],
   providers: [AppService, ImageService, PrismaService],
