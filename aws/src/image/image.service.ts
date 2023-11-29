@@ -25,7 +25,7 @@ export class ImageService {
       process.cwd(),
       'src',
       'public',
-      'images',
+      'image',
       file.originalname,
     );
     try {

@@ -2,6 +2,8 @@ import { S3, Rekognition } from 'aws-sdk';
 import { Logger, Injectable, BadRequestException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { CardService } from '@/card/card.service';
+import { ImageService } from '@/image/image.service';
+
 import { Card } from '@prisma/client';
 
 @Injectable()
@@ -11,7 +13,8 @@ export class S3Service {
 
   public constructor(
     private configService: ConfigService,
-    private cardService: CardService,
+    private readonly cardService: CardService,
+    private readonly imageService: ImageService,
   ) {
     this.s3 = new S3({
       region: this.configService.get<string>('AWS_REGION'),
@@ -20,20 +23,24 @@ export class S3Service {
     });
     this.rekognition = new Rekognition();
     this.cardService = cardService;
+    this.imageService = imageService;
   }
 
-  public async upload(file: {
+  public async checkStraightFace(file: {
     buffer: Buffer;
     originalname: string;
   }): Promise<Card> {
     try {
+      await this.imageService.validateImage(file);
       const { originalname } = file;
-      await this.uploadS3(file.buffer, originalname);
+
+      await Promise.all([
+        this.imageService.saveImage(file),
+        this.uploadS3(file.buffer, originalname),
+      ]);
+
       const response = await this.detectFaces(originalname);
-      console.log(
-        '🚀 ~ file: s3.service.ts:33 ~ S3Service ~ response:',
-        response.FaceDetails.length === 0,
-      );
+
       if (response.FaceDetails.length === 0) {
         throw new BadRequestException('Cannot detect face');
       }
@@ -54,7 +61,7 @@ export class S3Service {
       };
       return this.cardService.create(cardData);
     } catch (error) {
-      throw error;
+      throw new BadRequestException(error.message);
     }
   }
 
