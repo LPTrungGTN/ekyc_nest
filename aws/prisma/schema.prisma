@@ -20,12 +20,12 @@ model Card {
 }
 model Card_informations {
 	id Int @id @default(autoincrement())
+    type String?
 	id_number String?
 	full_name String?
 	birthday String?
 	address String? 
-	gender String?
-	nationaliry String?
+	nationality String?
 	issue_date String?
 	expire_date String?
 }

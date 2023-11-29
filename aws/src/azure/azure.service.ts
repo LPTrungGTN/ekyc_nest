@@ -37,9 +37,18 @@ export class AzureService {
     try {
       const startTime = performance.now();
       if (type === DocumentType.passport) {
-        const analyzeResult =
-          await this.AnalyzePassportService.analyzePassport(imageName);
-        return analyzeResult;
+        const [classifyResult, analyzeResult] = await Promise.all([
+          this.classifyDocumentService.classifyDocument(imageName),
+          this.AnalyzePassportService.analyzePassport(imageName),
+        ]);
+        if (classifyResult === 'passport') {
+          this.databaseService.savePassportToDb(analyzeResult);
+          return analyzeResult;
+        }
+
+        // const analyzeResult =
+        //   await this.AnalyzePassportService.analyzePassport(imageName);
+        // return analyzeResult;
       } else {
         const [classifyResult, analyzeResult] = await Promise.all([
           this.classifyDocumentService.classifyDocument(imageName),
@@ -52,53 +61,31 @@ export class AzureService {
         const endTime = performance.now();
         const elapsedTime = (endTime - startTime) / 1000;
 
-        // loop
-        // console.log("document type ls",DocumentType[1]);
-
         console.log(`Time : ${elapsedTime} s`);
         switch (type) {
           case DocumentType.residence_card:
             if (classifyResult === 'residence_card') {
-              this.databaseService.saveDataToDatabase(analyzeResult);
-
+              this.databaseService.saveResidenceToDb(analyzeResult);
               return analyzeResult;
-            } else {
-              return {
-                // Trả về thông báo lỗi nếu phân loại sai
-                error: 'please upload correct residence card',
-              };
-            }
+            } 
           case DocumentType.lisense:
             if (classifyResult === 'lisense') {
+                this.databaseService.saveLisenseToDb(analyzeResult);
               return analyzeResult;
-            } else {
-              return {
-                // Trả về thông báo lỗi nếu phân loại sai
-                error: 'please upload correct lisence',
-              };
-            }
+            } 
           case DocumentType.my_number:
             if (classifyResult === 'my_number') {
+                this.databaseService.saveMynumberToDb(analyzeResult);
               return analyzeResult;
-            } else {
-              return {
-                // Trả về thông báo lỗi nếu phân loại sai
-                error: 'please upload correct mynumber',
-              };
-            }
+            } 
           case DocumentType.Vietnamese_idcard:
             if (classifyResult === 'Vietnamese_idcard') {
+                this.databaseService.saveVietnamesIdToDb(analyzeResult);
               return analyzeResult;
-            } else {
-              return {
-                // Trả về thông báo lỗi nếu phân loại sai
-                error: 'please upload correct Vietnamese idcard',
-              };
             }
           default:
             return {
-              // Trả về thông báo lỗi nếu không xác định được loại tài liệu
-              error: 'please upload correct DocumentType',
+              error: 'please upload correct '+ DocumentType[type]
             };
         }
       }
