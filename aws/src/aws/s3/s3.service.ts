@@ -46,14 +46,11 @@ export class S3Service {
       }
       const face = response.FaceDetails[0];
       const { Roll, Yaw, Pitch } = face.Pose;
-      const threshold = 10;
-      if (
-        Math.abs(Roll) >= threshold ||
-        Math.abs(Yaw) >= threshold ||
-        Math.abs(Pitch) >= threshold
-      ) {
-        throw new BadRequestException('Not straight face');
-      }
+      await Promise.all([
+        this.checkRoll(Roll),
+        this.checkYaw(Yaw),
+        this.checkPitch(Pitch),
+      ]);
 
       const cardData = {
         cardType: 'passport',
@@ -62,6 +59,64 @@ export class S3Service {
       return this.cardService.create(cardData);
     } catch (error) {
       throw new BadRequestException(error.message);
+    }
+  }
+
+  public async checkSideFace(file: {
+    buffer: Buffer;
+    originalname: string;
+  }): Promise<Card> {
+    try {
+      await this.imageService.validateImage(file);
+      const { originalname } = file;
+
+      await Promise.all([
+        this.imageService.saveImage(file),
+        this.uploadS3(file.buffer, originalname),
+      ]);
+
+      const response = await this.detectFaces(originalname);
+
+      if (response.FaceDetails.length === 0) {
+        throw new BadRequestException('Cannot detect face');
+      }
+      const face = response.FaceDetails[0];
+      const { Roll, Yaw, Pitch } = face.Pose;
+      await Promise.all([
+        this.checkRoll(Roll),
+        this.checkYaw(Yaw, 35, 55),
+        this.checkPitch(Pitch),
+      ]);
+
+      const cardData = {
+        cardType: 'passport',
+        tiltedFace: originalname,
+      };
+      return this.cardService.create(cardData);
+    } catch (error) {
+      throw new BadRequestException(error.message);
+    }
+  }
+
+  private checkRoll(roll: number, threshold: number = 10): void {
+    if (Math.abs(roll) >= threshold) {
+      throw new BadRequestException('Face is not level horizontally');
+    }
+  }
+
+  private checkYaw(
+    yaw: number,
+    lowerThreshold: number = 0,
+    upperThreshold: number = 10,
+  ): void {
+    if (Math.abs(yaw) < lowerThreshold || Math.abs(yaw) > upperThreshold) {
+      throw new BadRequestException('Face is not facing forward');
+    }
+  }
+
+  private checkPitch(pitch: number, threshold: number = 10): void {
+    if (Math.abs(pitch) >= threshold) {
+      throw new BadRequestException('Face is not level vertically');
     }
   }
 
