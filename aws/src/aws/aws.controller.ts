@@ -22,9 +22,17 @@ export class AwsController {
 
   @Post('/straight_face')
   @UseInterceptors(FileInterceptor('file'))
-  async upload(
+  async straightFace(
     @UploadedFile() file: { buffer: Buffer; originalname: string },
   ): Promise<Card> {
     return this.s3Service.checkStraightFace(file);
+  }
+
+  @Post('/side_face')
+  @UseInterceptors(FileInterceptor('file'))
+  async sideFace(
+    @UploadedFile() file: { buffer: Buffer; originalname: string },
+  ): Promise<Card> {
+    return this.s3Service.checkSideFace(file);
   }
 }
