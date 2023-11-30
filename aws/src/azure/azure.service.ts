@@ -10,6 +10,7 @@ import { ClassifyDocumentService } from './classify-document/classify-document.s
 import { AnalyzeDocumentService } from './analyze-document/analyze-document.service';
 import { AnalyzePassportService } from './analyze-passport/analyze-passport.service';
 import { DatabaseService } from './import-cardinfo/import-cardinfo.service';
+import { DeleteImageService } from './delete-image/delete-image.service';
 
 import DocumentType from './document-type.enum';
 import DocumentModelid from './document-modelid.enums';
@@ -21,12 +22,14 @@ export class AzureService {
   private readonly analyzeDocumentService: AnalyzeDocumentService;
   private readonly AnalyzePassportService: AnalyzePassportService;
   private readonly databaseService: DatabaseService;
+  private readonly deleteImageService: DeleteImageService;
 
   constructor() {
     this.classifyDocumentService = new ClassifyDocumentService();
     this.analyzeDocumentService = new AnalyzeDocumentService();
     this.AnalyzePassportService = new AnalyzePassportService();
     this.databaseService = new DatabaseService();
+    this.deleteImageService = new DeleteImageService();
   }
 
   async processImage(
@@ -65,12 +68,13 @@ export class AzureService {
         const endTime = performance.now();
         const elapsedTime = (endTime - startTime) / 1000;
         console.log(`Time : ${elapsedTime} s`);
-
+        this.deleteImageService.DeleteImageService(imageName);
         if (
           type === DocumentType.residence_card &&
           classifyResult === 'residence_card'
         ) {
           this.databaseService.saveResidenceToDb(analyzeResult);
+
           return analyzeResult;
         } else if (
           type === DocumentType.lisense &&

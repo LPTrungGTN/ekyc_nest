@@ -5,6 +5,7 @@ import { ClassifyDocumentService } from '@/azure/classify-document/classify-docu
 import { AnalyzeDocumentService } from '@/azure/analyze-document/analyze-document.service';
 import { AnalyzePassportService } from '@/azure/analyze-passport/analyze-passport.service';
 import { PrismaService } from '@/prisma/prisma.service';
+import { DeleteImageService } from './delete-image/delete-image.service';
 @Module({
   imports: [],
   controllers: [AzureController],
@@ -14,6 +15,7 @@ import { PrismaService } from '@/prisma/prisma.service';
     AnalyzeDocumentService,
     AnalyzePassportService,
     PrismaService,
+    DeleteImageService,
   ],
 })
 export class AzureModule {}
