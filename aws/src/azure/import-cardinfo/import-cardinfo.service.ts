@@ -1,4 +1,4 @@
-import { Injectable ,  BadGatewayException} from '@nestjs/common';
+import { Injectable, BadGatewayException } from '@nestjs/common';
 import { PrismaService } from '@/prisma/prisma.service';
 
 @Injectable()
@@ -18,8 +18,11 @@ export class DatabaseService {
       const result = await this.prisma.card_informations.create({
         data: {
           type: 'passport',
-          id_number: dataToSave['DocumentNumber'] && dataToSave['DocumentNumber'] ,
-          full_name: dataToSave['LastName'] + dataToSave['FirstName'] && dataToSave['LastName'] + dataToSave['FirstName'],
+          id_number:
+            dataToSave['DocumentNumber'] && dataToSave['DocumentNumber'],
+          full_name:
+            dataToSave['LastName'] + dataToSave['FirstName'] &&
+            dataToSave['LastName'] + dataToSave['FirstName'],
           birthday: dateOfBirth && dateOfBirth,
           nationality: dataToSave['Nationality'] && dataToSave['Nationality'],
           expire_date: dateOfExpiration && dateOfExpiration,
@@ -116,4 +119,3 @@ export class DatabaseService {
     }
   }
 }
-

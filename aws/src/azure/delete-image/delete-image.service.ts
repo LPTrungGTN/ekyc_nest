@@ -4,24 +4,20 @@ import * as path from 'path';
 
 @Injectable()
 export class DeleteImageService {
+  private imageDirectory = 'src/public/image/';
 
-    private imageDirectory = "src/public/image/";
+  constructor() {}
 
-    constructor() { 
+  DeleteImageService(fileName: string): boolean {
+    const imagePath = path.join(this.imageDirectory, fileName);
+
+    try {
+      fs.unlinkSync(imagePath);
+      console.log(`image ${fileName} deleted successfully`);
+      return true;
+    } catch (error) {
+      console.log(`error when deleting image ${fileName}`, error);
+      return false;
     }
-
-    DeleteImageService(fileName: string): boolean {
-        const imagePath = path.join(this.imageDirectory, fileName);
-
-        try {
-            fs.unlinkSync(imagePath);
-            console.log(`image ${fileName} deleted successfully`);
-            return true;
-        }
-        catch (error){
-            console.log(`error when deleting image ${fileName}`, error);
-            return false;
-        }
-    }
-
+  }
 }
