@@ -68,7 +68,7 @@ export class AzureService {
         const endTime = performance.now();
         const elapsedTime = (endTime - startTime) / 1000;
         console.log(`Time : ${elapsedTime} s`);
-        this.deleteImageService.DeleteImageService(imageName);
+        // this.deleteImageService.DeleteImageService(imageName);
         if (
           type === DocumentType.residence_card &&
           classifyResult === 'residence_card'

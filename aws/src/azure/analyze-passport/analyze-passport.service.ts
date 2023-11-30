@@ -1,10 +1,11 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, BadRequestException } from '@nestjs/common';
 import {
   AzureKeyCredential,
   DocumentAnalysisClient,
 } from '@azure/ai-form-recognizer';
 import * as fs from 'fs';
 import * as path from 'path';
+import { Console } from 'console';
 
 @Injectable()
 export class AnalyzePassportService {
@@ -46,10 +47,14 @@ export class AnalyzePassportService {
       for (const key in machineReadableTexts) {
         documentResult[key] = machineReadableTexts[key].value;
       }
+      if (Object.keys(documentResult).length === 0) {
+        throw new BadRequestException('your passport is not readable');
+      }
+
       return documentResult;
     } else {
       console.log('cannot extract data');
-      return { error: 'cannot extract data' };
+      throw new BadRequestException('cannot extract data');
     }
   }
 }

@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable ,  BadGatewayException} from '@nestjs/common';
 import { PrismaService } from '@/prisma/prisma.service';
 
 @Injectable()
@@ -18,17 +18,17 @@ export class DatabaseService {
       const result = await this.prisma.card_informations.create({
         data: {
           type: 'passport',
-          id_number: dataToSave['DocumentNumber'],
-          full_name: dataToSave['LastName'] + dataToSave['FirstName'],
-          birthday: dateOfBirth,
-          nationality: dataToSave['Nationality'],
-          expire_date: dateOfExpiration,
+          id_number: dataToSave['DocumentNumber'] && dataToSave['DocumentNumber'] ,
+          full_name: dataToSave['LastName'] + dataToSave['FirstName'] && dataToSave['LastName'] + dataToSave['FirstName'],
+          birthday: dateOfBirth && dateOfBirth,
+          nationality: dataToSave['Nationality'] && dataToSave['Nationality'],
+          expire_date: dateOfExpiration && dateOfExpiration,
         },
       });
       console.log('successfully save passport data to db');
       return result;
     } catch (error) {
-      throw new Error(`Error saving data to database: ${error.message}`);
+      throw new BadGatewayException(`Error saving data to database`);
     }
   }
   // Japanese residence card
