@@ -46,8 +46,8 @@ export class DatabaseService {
           birthday: dataToSave['Date of Birth'] && dataToSave['Date of Birth'],
           address: dataToSave['Address'] && dataToSave['Address'],
           nationality: dataToSave['Nationality'] && dataToSave['Nationality'],
-          issue_date: dataToSave['Date valid'] && dataToSave['Date valid'],
-          expire_date: dataToSave['Date issued'] && dataToSave['Date issued'],
+          issue_date: dataToSave['Date issued'] && dataToSave['Date issued'],
+          expire_date: dataToSave['Date valid'] && dataToSave['Date valid'],
         },
       });
       console.log('successfully save residence card data to db');

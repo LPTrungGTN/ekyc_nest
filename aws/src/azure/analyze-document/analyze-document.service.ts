@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, BadRequestException } from '@nestjs/common';
 import {
   AzureKeyCredential,
   DocumentAnalysisClient,
@@ -42,6 +42,16 @@ export class AnalyzeDocumentService {
       documentResult[name] = field.content;
     });
 
+    const idNumberLength = documentResult['Id number'].length;
+    if (idNumberLength !== 12) {
+        console.log('id number length is ', idNumberLength);
+        throw new BadRequestException('your id number is invalid');
+    }
+
     return documentResult;
   }
 }
+
+
+
+

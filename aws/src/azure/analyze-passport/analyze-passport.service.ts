@@ -5,7 +5,6 @@ import {
 } from '@azure/ai-form-recognizer';
 import * as fs from 'fs';
 import * as path from 'path';
-import { Console } from 'console';
 
 @Injectable()
 export class AnalyzePassportService {
